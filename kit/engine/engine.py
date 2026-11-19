@@ -324,6 +324,22 @@ def cached(fn):
 
 
 # ---------------------------------------------------------------- renderer
+class VReader:
+    def __init__(self, path):
+        self.path = path; self.p = None; self.next = -1; self.last = None
+    def get(self, fi):
+        import subprocess
+        if self.p is None or fi != self.next:
+            if self.p: self.p.kill()
+            self.p = subprocess.Popen(["ffmpeg", "-v", "quiet", "-ss", f"{fi/FPS:.4f}", "-i", self.path, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE, bufsize=W*H*3*2)
+            self.next = fi
+        buf = self.p.stdout.read(W * H * 3)
+        if len(buf) == W * H * 3:
+            self.last = np.frombuffer(buf, np.uint8).reshape(H, W, 3)
+        self.next = fi + 1
+        return self.last
+
+
 class Timeline:
     def __init__(self, duration):
         self.duration = duration
@@ -368,6 +384,17 @@ class Timeline:
 
     def frame(self, fi):
         t = fi / FPS
+        vr = getattr(self, "video_ranges", None)
+        if vr:
+            for f0, f1, mode in vr:
+                if f0 <= fi < f1:
+                    if not hasattr(self, "_vreader"):
+                        self._vreader = VReader(self.video_path)
+                    arr = self._vreader.get(fi)
+                    if arr is not None:
+                        k = 0.85 if mode == "key" else 0.62
+                        base = (arr.astype(np.float32) * k).astype(np.uint8)
+                        return self._compose(base, fi, t)
         idx = 0
         for i, (t0, _, _) in enumerate(self.bgs):
             if t0 <= t:
@@ -380,6 +407,9 @@ class Timeline:
             prev = self._bg_at(idx - 1, t)
             a = ease_io((t - self.bgs[idx][0]) / XF)
             base = (prev.astype(np.float32) * (1 - a) + base.astype(np.float32) * a).astype(np.uint8)
+        return self._compose(base, fi, t)
+
+    def _compose(self, base, fi, t):
         frame = Image.fromarray(np.ascontiguousarray(base), "RGB").convert("RGBA")
         for it in self.items:
             it.draw(frame, t)
