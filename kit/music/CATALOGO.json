@@ -1,0 +1,11 @@
+{
+  "origem": "Trilhas criadas pelo Elias Ferreira no Suno (enviadas em 19/11/2026). Uso comercial depende de terem sido feitas em plano pago (Pro/Premier).",
+  "regras": "Usar como fundo instrumental com ducking sob a narração (cerca de -20 dB sob a voz). Alternar: não repetir a mesma faixa em dias seguidos. Fazer loop com crossfade de 3 s se o vídeo for mais longo que a faixa.",
+  "faixas": [
+    {"arquivo": "hiphop_01_noticias_92bpm.mp3", "duracao_s": 180, "bpm": 92, "lufs": -14.1, "clima": "notícias, ritmo médio, base do boletim", "original": "TRILHA DO VASCO 01/02"},
+    {"arquivo": "hiphop_02_base_96bpm.mp3", "duracao_s": 169, "bpm": 96, "lufs": -14.3, "clima": "base do boletim, mercado e bastidores", "original": "TRILHA DO VASCO (1)"},
+    {"arquivo": "hiphop_03_curta_96bpm.mp3", "duracao_s": 133, "bpm": 96, "lufs": -14.1, "clima": "base curta, Shorts e blocos rápidos", "original": "TRILHA DO VASCO 03"},
+    {"arquivo": "hiphop_04_base_96bpm.mp3", "duracao_s": 168, "bpm": 96, "lufs": -14.1, "clima": "base do boletim, pós-jogo", "original": "TRILHA DO VASCO"},
+    {"arquivo": "hiphop_05_energia_96bpm.mp3", "duracao_s": 250, "bpm": 96, "lufs": -10.7, "clima": "energia alta: abertura, gancho, dia de jogo e vitória", "original": "TRILHA DO VASCO 05", "atencao": "análise automática detectou trechos melódicos que podem ser voz/vocal chop; confirmar com o Elias antes de usar sob a narração"}
+  ]
+}
